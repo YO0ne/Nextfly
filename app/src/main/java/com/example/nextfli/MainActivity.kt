@@ -2,19 +2,25 @@ package com.example.nextfli
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Layout
+import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.appcompat.widget.ToolbarWidgetWrapper
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.JsonObject
+import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +30,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var imageSearch: ImageView
     lateinit var editSearch: EditText
 
-    lateinit var tvResponse: TextView
+    lateinit var editMovieSearch: EditText
+    lateinit var buttonSearch: Button
+    lateinit var movieTitle: TextView
+    lateinit var movieSummary: TextView
+    lateinit var moviePoster: ImageView
+    lateinit var movieReleaseDate: TextView
+
+    lateinit var movieLayout: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +49,19 @@ class MainActivity : AppCompatActivity() {
         editSearch = toolbar.findViewById(R.id.editSearch)
         setSupportActionBar(toolbar)
 
-        tvResponse = findViewById(R.id.tvResponse)
+        editMovieSearch = findViewById(R.id.editMovieSearch)
+        buttonSearch = findViewById(R.id.buttonSearch)
+        movieTitle = findViewById(R.id.movieTitle)
+        movieSummary = findViewById(R.id.movieSummary)
+        moviePoster = findViewById(R.id.moviePoster)
+        movieReleaseDate = findViewById(R.id.movieReleaseText)
+
+        movieLayout = findViewById(R.id.movieLayout)
 
         //TODO: create retrofit instance
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/")
-            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val movieService = retrofit.create(MovieService::class.java)
@@ -49,15 +69,31 @@ class MainActivity : AppCompatActivity() {
         //TODO: call moviedb api
         val result = movieService.getMovie()
 
-        result.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        result.enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
-                    tvResponse.text = response.body()
+                    val result = response.body()
+                    val results = result?.get("results")?.asJsonArray
+                    val firstMovie = results?.get(0)?.asJsonObject
+                    val originalTitle = firstMovie?.get("original_title")?.asString
+                    val overview = firstMovie?.get("overview")?.asString
+                    val release = firstMovie?.get("release_date")?.asString
+
+                    val poster = firstMovie?.get("poster_path")?.asString
+                    Picasso.get().load("https://image.tmdb.org/t/p/original/$poster").into(moviePoster)
+
+
+                    movieTitle.text = "$originalTitle"
+                    movieSummary.text = "$overview"
+                    movieReleaseDate.text = "$release"
+
+                    movieLayout.visibility = View.VISIBLE
+
                 }
 
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
                 Toast.makeText(applicationContext, "Erreur serveur", Toast.LENGTH_SHORT).show()
             }
 
