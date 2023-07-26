@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    app:cardCornerRadius="8dp"
+    android:padding="8dp"
+    android:layout_margin="4dp"
+    app:cardElevation="16dp"
+    app:cardBackgroundColor="@color/dark_blue">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/posterMovie"
+            android:layout_width="100dp"
+            android:layout_height="160dp"
+            android:layout_margin="8dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/oppenheimer"/>
+        <TextView
+            android:id="@+id/titleMovie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/posterMovie"
+            android:layout_marginTop="10dp"
+            tools:text="Oppenheimer"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textAllCaps="true"/>
+
+        <TextView
+            android:id="@+id/release"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleMovie"
+            android:layout_toEndOf="@+id/posterMovie"
+            android:textStyle="bold"
+            android:text="Date de sortie"/>
+        <TextView
+            android:id="@+id/releaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/release"
+            android:layout_below="@id/titleMovie"
+            android:layout_marginLeft="4dp"
+            tools:text="19/07/2023"
+            />
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/release"
+            android:layout_toEndOf="@id/posterMovie"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            tools:rating="3.5"
+            android:progressTint="#2196F3"
+            android:secondaryProgressTint="#2196F3"
+            />
+
+        <TextView
+            android:id="@+id/overviewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:layout_toEndOf="@id/posterMovie"
+            android:layout_marginRight="4dp"
+            android:maxLines="4"
+            android:textSize="12sp"
+            android:ellipsize="end"
+            tools:text="Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , Résumé du film , "/>
+
+        <TextView
+            android:id="@+id/overview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Résumé"
+            android:layout_above="@id/overviewText"
+            android:textStyle="bold"
+            android:layout_toEndOf="@id/posterMovie"/>
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
